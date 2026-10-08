@@ -4,29 +4,31 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("GROQ_API_KEY")
 
-url = "https://api.openai.com/v1/chat/completions"
+url = "https://api.groq.com/openai/v1/chat/completions"
 
-header = {
-    "Content-type" : "application/json",
-    "Authorization" : f"Bearer {api_key}"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {api_key}"
 }
 
 payload = {
-    "model" : "gpt-4o-mini",
-    "message": [
+    "model": "openai/gpt-oss-20b",
+    "messages": [
         {
-            "role" : "user",
-            "content" : "What is AI?"
+            "role": "user",
+            "content": "What is AI?"
         }
     ]
 }
 
 result = requests.post(
     url,
-    headers=header,
+    headers=headers,
     json=payload
 )
 
-print(result.json())
+data = result.json()
+print(result.status_code)
+print(data["choices"][0]["message"]["content"])
